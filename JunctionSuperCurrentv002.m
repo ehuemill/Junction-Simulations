@@ -44,9 +44,9 @@ FluxinJuncMax=5;
 
 %Phase Loop parameters
 p=1;
-pmax=101;
+pmax=301;
 Phase1Min=0*pi;
-Phase1Max=2*pi;
+Phase1Max=4*pi;
 
 
 
