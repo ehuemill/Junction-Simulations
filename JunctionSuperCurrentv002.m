@@ -29,7 +29,7 @@ x(1,:)=(1:xmax);
 
 %geometrical Phase Loop Parameters
 g=1;
-gmax=7;
+gmax=4;
 PhaseGMin=0;
 PhaseGMax=pi;
 
@@ -37,14 +37,14 @@ PhaseGMax=pi;
 
 %Flux Loop Parameters
 f=1;
-fmax=501;
+fmax=251;
 FluxinJuncMin=-5;
 FluxinJuncMax=5;
 
 
 %Phase Loop parameters
 p=1;
-pmax=201;
+pmax=101;
 Phase1Min=0*pi;
 Phase1Max=2*pi;
 
@@ -56,7 +56,7 @@ PhaseG=zeros(1,xmax);
 SCurrentDensity2=zeros(1,gmax);
 FluxinJunc=zeros(1,fmax);
 
-
+PhaseGShift=ones(1,gmax);
 SCurrentDensityNoise=(2*rand(1,xmax)-1);
 SCurrentDensity=ones(1,xmax)+0.1*SCurrentDensityNoise;
 
@@ -75,10 +75,10 @@ for g=1:gmax
     
     %Defining the phase shift for part of the junction
     
-
+    PhaseGShift(g)=PhaseGMin+(g-1).*PhaseGSS;
     PhaseG(1,1:round(xmax/2))=0;
     
-    PhaseG(xmax-round(xmax/2):xmax)=PhaseGMin+(g-1).*PhaseGSS/(gmax-1);
+    PhaseG(1,xmax-round(xmax/2):xmax)=PhaseGShift(g);
   
     %Field Contribution to the Phase 
     %Define the loop setp size, then run the for loop
