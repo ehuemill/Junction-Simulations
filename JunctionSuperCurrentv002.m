@@ -30,8 +30,8 @@ x(1,:)=(1:xmax);
 %geometrical Phase Loop Parameters
 g=1;
 gmax=7;
-SCurrentDensity2Min=-.5;
-SCurrentDensity2Max=1;
+PhaseGMin=0;
+PhaseGMax=pi;
 
 
 
@@ -58,7 +58,7 @@ FluxinJunc=zeros(1,fmax);
 
 
 SCurrentDensityNoise=(2*rand(1,xmax)-1);
-SCurrentDensity1=ones(1,xmax)+0.1*SCurrentDensityNoise;
+SCurrentDensity=ones(1,xmax)+0.1*SCurrentDensityNoise;
 
 
 SCurrent=zeros(xmax,pmax,fmax);
@@ -70,15 +70,15 @@ MaxSCurrentNet=zeros(1,fmax,gmax);
 
 %Geometrical factor Loop
 %Define the loop setp size, then run the for loop
-SCurrentDensity2SS=(SCurrentDensity2Max-SCurrentDensity2Min)/(gmax-1);
+PhaseGSS=(PhaseGMax-PhaseGMin)/(gmax-1);
 for g=1:gmax
     
-    %Defining the SinPhi/2 component critical Current
+    %Defining the phase shift for part of the junction
     
 
-    SCurrentDensity2(:,g)=SCurrentDensity2SS*(g-1)+SCurrentDensity2Min;
-
-    SCurrentDensity1(:,g)=1-SCurrentDensity2(g);    
+    PhaseG(1,1:round(xmax/2))=0;
+    
+    PhaseG(xmax-round(xmax/2):xmax)=PhaseGMin+(g-1).*PhaseGSS/(gmax-1);
   
     %Field Contribution to the Phase 
     %Define the loop setp size, then run the for loop
@@ -95,7 +95,7 @@ for g=1:gmax
 
             Phase1(p)=Phase1Min+(p-1)*Phase1SSS;
 
-            SCurrent=SCurrentDensity1(:,g).*sin(PhaseF+Phase1(p)+PhaseG)+SCurrentDensity2(:,g).*sin((PhaseF+Phase1(p)+PhaseG)/2);
+            SCurrent=SCurrentDensity.*sin(PhaseF+Phase1(p)+PhaseG);
             SCurrentNet(p)=sum(SCurrent)/xmax;
 
 
