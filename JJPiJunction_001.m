@@ -23,7 +23,7 @@ clear;
 clc;
 close all;
 %% Defining the Parameters of the Simulaiton
-xmax=31;
+xmax=101;
 x(1,:)=(1:xmax);
 
 
@@ -37,14 +37,14 @@ PhaseGMax=pi;
 
 %Flux Loop Parameters
 f=1;
-fmax=101;
+fmax=501;
 FluxinJuncMin=-5;
 FluxinJuncMax=5;
 
 
 %Phase Loop parameters
 p=1;
-pmax=201;
+pmax=101;
 Phase1Min=0*pi;
 Phase1Max=2*pi;
 
@@ -58,7 +58,7 @@ FluxinJunc=zeros(1,fmax);
 
 
 SCurrentDensityNoise=(2*rand(1,xmax)-1);
-SCurrentDensity=ones(1,xmax)+0.1*SCurrentDensityNoise;
+SCurrentDensity=ones(1,xmax)+0.0*SCurrentDensityNoise;
 
 
 SCurrent=zeros(xmax,pmax,fmax);
@@ -90,10 +90,10 @@ for g=1:gmax
         
         %Phase1 Loop of externally set phase in 
         %Define the loop setp size, then run the for loop
-        Phase1SSS=(Phase1Max-Phase1Min)/(pmax-1);
+        Phase1SS=(Phase1Max-Phase1Min)/(pmax-1);
         for p=1:pmax
 
-            Phase1(p)=Phase1Min+(p-1)*Phase1SSS;
+            Phase1(p)=Phase1Min+(p-1)*Phase1SS;
 
             SCurrent=SCurrentDensity.*sin(PhaseF+Phase1(p)+PhaseG);
             SCurrentNet(p)=sum(SCurrent)/xmax;
@@ -108,7 +108,7 @@ for g=1:gmax
 end
 
 figure
-plot(FluxinJunc,MaxSCurrentNet(:,:))
+plot(FluxinJunc,MaxSCurrentNet(:,:),'.')
 xlabel('Flux Quanta in Junction');ylabel('Net Supercurrent');
 title('Fraunhofer Pattern for different Phase Shifts');
 

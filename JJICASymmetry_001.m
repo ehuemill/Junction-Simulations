@@ -23,28 +23,28 @@ clear;
 clc;
 close all;
 %% Defining the Parameters of the Simulaiton
-xmax=31;
+xmax=101;
 x(1,:)=(1:xmax);
 
 
 %geometrical Phase Loop Parameters
 g=1;
 gmax=4;
-PhaseGMin=0;
-PhaseGMax=pi;
+SCurrentAsymmetryMin=0;
+SCurrentAsymmetryMax=.5;
 
 
 
 %Flux Loop Parameters
 f=1;
-fmax=101;
+fmax=501;
 FluxinJuncMin=-5;
 FluxinJuncMax=5;
 
 
 %Phase Loop parameters
 p=1;
-pmax=201;
+pmax=101;
 Phase1Min=0*pi;
 Phase1Max=2*pi;
 
@@ -58,7 +58,6 @@ FluxinJunc=zeros(1,fmax);
 
 
 SCurrentDensityNoise=(2*rand(1,xmax)-1);
-SCurrentDensity=ones(1,xmax)+0.1*SCurrentDensityNoise;
 
 
 SCurrent=zeros(xmax,pmax,fmax);
@@ -70,16 +69,17 @@ MaxSCurrentNet=zeros(fmax,gmax);
 
 %Geometrical factor Loop
 %Define the loop setp size, then run the for loop
-PhaseGSS=(PhaseGMax-PhaseGMin)/(gmax-1);
+SCurrentAsymmetrySS=(SCurrentAsymmetryMax-SCurrentAsymmetryMin)/(gmax-1);
 for g=1:gmax
     
-    %Defining the phase shift for part of the junction
-    
+    %Defining the SCurrentDensity to start with
+        
+        SCurrentDensity=ones(1,xmax)+0.01*SCurrentDensityNoise;
+        
+        SCurrentAsymmetry=(2*x/xmax-.5)*(g-1)*SCurrentAsymmetrySS;
+        SCurrentDensity=SCurrentDensity+SCurrentAsymmetry;
 
-    PhaseG(1,1:round(xmax/2))=0;
-    
-    PhaseG(xmax-round(xmax/2):xmax)=PhaseGMin+(g-1).*PhaseGSS;
-  
+
     %Field Contribution to the Phase 
     %Define the loop setp size, then run the for loop
     FluxinJuncSS=(FluxinJuncMax-FluxinJuncMin)/(fmax-1);
@@ -90,10 +90,10 @@ for g=1:gmax
         
         %Phase1 Loop of externally set phase in 
         %Define the loop setp size, then run the for loop
-        Phase1SSS=(Phase1Max-Phase1Min)/(pmax-1);
+        Phase1SS=(Phase1Max-Phase1Min)/(pmax-1);
         for p=1:pmax
 
-            Phase1(p)=Phase1Min+(p-1)*Phase1SSS;
+            Phase1(p)=Phase1Min+(p-1)*Phase1SS;
 
             SCurrent=SCurrentDensity.*sin(PhaseF+Phase1(p)+PhaseG);
             SCurrentNet(p)=sum(SCurrent)/xmax;
@@ -108,7 +108,7 @@ for g=1:gmax
 end
 
 figure
-plot(FluxinJunc,MaxSCurrentNet(:,:))
+plot(FluxinJunc,MaxSCurrentNet(:,:),'.')
 xlabel('Flux Quanta in Junction');ylabel('Net Supercurrent');
 title('Fraunhofer Pattern for different Phase Shifts');
 
