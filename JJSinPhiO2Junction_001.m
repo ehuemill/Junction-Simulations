@@ -106,7 +106,7 @@ for g=1:gmax
 end
 
 figure
-plot(FluxinJunc,MaxSCurrentNet(:,:))
+plot(FluxinJunc,MaxSCurrentNet(:,:),'.')
 xlabel('Flux Quanta in Junction');ylabel('Net Supercurrent');
 title('Fraunhofer Pattern for different Harmonic Critical Currents');
 
